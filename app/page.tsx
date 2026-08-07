@@ -19,6 +19,11 @@ import {
   X,
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
+import dynamic from "next/dynamic";
+
+const Tilt3D = dynamic(() => import("./motion-primitives").then((module) => module.Tilt3D), { ssr: false });
+const FloatLayer = dynamic(() => import("./motion-primitives").then((module) => module.FloatLayer), { ssr: false });
+const ScrollProgress = dynamic(() => import("./motion-primitives").then((module) => module.ScrollProgress), { ssr: false });
 
 const PHONE = "595993372593";
 const EMAIL = "tustareas.py.edu@gmail.com";
@@ -155,6 +160,7 @@ export default function Home() {
 
   return (
     <main>
+      <ScrollProgress />
       <div className="topbar">
         <span><CircleCheck size={15} /> Diagnóstico gratuito y sin compromiso</span>
         <div><a href={`mailto:${EMAIL}`}><Mail size={14} /> {EMAIL}</a><a href={buildWhatsApp("asesoría académica")}><MessageCircle size={14} /> +595 993 372593</a></div>
@@ -193,14 +199,14 @@ export default function Home() {
               <div><strong>100%</strong><span>Atención confidencial</span></div>
             </div>
           </div>
-          <div className="hero-visual brand-visual" aria-label="Modalidades de tustareas.py">
+          <Tilt3D className="hero-visual brand-visual" intensity={4}>
             <div className="brand-disc"><img src="/isotipo-tustareas.png" alt="Isotipo de tustareas.py" /></div>
-            <div className="modality-pill pill-one"><GraduationCap /><span><b>Tutoría</b>Acompañamiento</span></div>
-            <div className="modality-pill pill-two"><FilePenLine /><span><b>Desarrollo</b>Elaboración profesional</span></div>
-            <div className="modality-pill pill-three"><BookOpenCheck /><span><b>Corrección</b>Revisión integral</span></div>
+            <FloatLayer className="modality-pill pill-one"><GraduationCap /><span><b>Tutoría</b>Acompañamiento</span></FloatLayer>
+            <FloatLayer className="modality-pill pill-two" delay={0.8}><FilePenLine /><span><b>Desarrollo</b>Elaboración profesional</span></FloatLayer>
+            <FloatLayer className="modality-pill pill-three" delay={1.5}><BookOpenCheck /><span><b>Corrección</b>Revisión integral</span></FloatLayer>
             <div className="brand-orbit orbit-one" />
             <div className="brand-orbit orbit-two" />
-          </div>
+          </Tilt3D>
         </div>
       </section>
 
