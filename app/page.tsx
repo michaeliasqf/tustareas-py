@@ -193,18 +193,13 @@ export default function Home() {
               <div><strong>100%</strong><span>Atención confidencial</span></div>
             </div>
           </div>
-          <div className="hero-visual" aria-label="Trabajo académico organizado">
-            <img className="hero-isotipo" src="/isotipo-tustareas.png" alt="" aria-hidden="true" />
-            <div className="paper-card paper-main">
-              <span className="paper-kicker">HOJA DE RUTA ACADÉMICA</span>
-              <h3>De la idea a la defensa</h3>
-              {["Diagnóstico inicial", "Plan de trabajo", "Revisión profesional", "Acompañamiento final"].map((item, i) => <div className="paper-step" key={item}><b>{i + 1}</b><span>{item}</span><Check size={16} /></div>)}
-              <div className="paper-progress"><span /></div>
-              <small>Avance del proceso · 85%</small>
-            </div>
-            <div className="floating-card one"><ShieldCheck /><div><b>Seguimiento real</b><span>Hasta tu aprobación</span></div></div>
-            <div className="floating-card two"><MessageCircle /><div><b>Respuesta cercana</b><span>Estamos para orientarte</span></div></div>
-            <div className="gold-orbit" />
+          <div className="hero-visual brand-visual" aria-label="Modalidades de tustareas.py">
+            <div className="brand-disc"><img src="/isotipo-tustareas.png" alt="Isotipo de tustareas.py" /></div>
+            <div className="modality-pill pill-one"><GraduationCap /><span><b>Tutoría</b>Acompañamiento</span></div>
+            <div className="modality-pill pill-two"><FilePenLine /><span><b>Desarrollo</b>Elaboración profesional</span></div>
+            <div className="modality-pill pill-three"><BookOpenCheck /><span><b>Corrección</b>Revisión integral</span></div>
+            <div className="brand-orbit orbit-one" />
+            <div className="brand-orbit orbit-two" />
           </div>
         </div>
       </section>
@@ -260,14 +255,14 @@ export default function Home() {
       <section className="extras section">
         <div className="extras-watermark"><img src="/isotipo-tustareas.png" alt="" aria-hidden="true" /></div>
         <div className="container">
-          <div className="extras-heading"><div><span className="section-kicker">EXTRAS OPCIONALES</span><h2>Sumá únicamente lo que tu modalidad necesita</h2></div><p>No son una cuarta modalidad ni repiten el servicio principal. Son apoyos puntuales que podés añadir a Tutoría, Desarrollo o Corrección según el estado de tu trabajo.</p></div>
+          <div className="extras-heading"><div><span className="section-kicker">SERVICIOS ESPECÍFICOS</span><h2>Sumá únicamente lo que tu modalidad necesita</h2></div><p>Apoyos puntuales que podés añadir a Tutoría, Desarrollo o Corrección según el estado y las necesidades de tu trabajo.</p></div>
           <div className="extras-grid">
             <article><FilePenLine /><div><h3>Formato y estructura</h3><p>Normas APA, bibliografía, índices automáticos, índice de tablas y figuras.</p></div></article>
             <article><BookOpenCheck /><div><h3>Encuestas y datos</h3><p>Google Forms, codificación, tabulación y organización de respuestas.</p></div></article>
             <article><Target /><div><h3>Análisis estadístico</h3><p>Tablas, gráficos e interpretación clara de resultados para tu investigación.</p></div></article>
             <article><GraduationCap /><div><h3>Defensa y exposición</h3><p>Presentación profesional y preparación personalizada para la exposición oral.</p></div></article>
           </div>
-          <a className="button extras-cta" href="#contacto">Consultar extras para mi modalidad <ArrowRight size={17} /></a>
+          <a className="button extras-cta" href="#contacto">Consultar servicios específicos <ArrowRight size={17} /></a>
         </div>
       </section>
 
