@@ -46,7 +46,7 @@ const services = [
     title: "Desarrollo Académico",
     label: "Completo o por etapas",
     description:
-      "Apoyo profesional para trabajos de investigación, tesis, monografías, proyectos y planes de negocio.",
+      "Elaboración profesional de trabajos de investigación, tesis, monografías, proyectos y planes de negocio.",
     bullets: [
       "Trabajo completo, capítulo o sección puntual",
       "Continuación o actualización de un trabajo",
@@ -145,7 +145,7 @@ export default function Home() {
       <header className="nav-wrap">
         <nav className="nav container" aria-label="Navegación principal">
           <a href="#inicio" className="brand" aria-label="tustareas.py — inicio">
-            <span className="brand-crop"><img src="/brand-board.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></span>
+            <img className="brand-logo" src="/logo-tustareas.png" alt="tustareas.py — Tareas, Proyectos, Tesis" />
           </a>
           <div className={`nav-links ${menuOpen ? "open" : ""}`}>
             <a href="#servicios" onClick={() => setMenuOpen(false)}>Servicios</a>
@@ -162,7 +162,7 @@ export default function Home() {
         <div className="hero-glow" />
         <div className="container hero-grid">
           <div className="hero-copy">
-            <div className="eyebrow"><Sparkles size={16} /> Asesoría académica en Paraguay</div>
+            <div className="eyebrow">Asesoría académica en Paraguay</div>
             <h1>Tu meta académica,<br /><span>bien acompañada.</span></h1>
             <p>Convertimos la incertidumbre en un plan claro. Te orientamos, desarrollamos o corregimos tu trabajo con rigor, confidencialidad y seguimiento hasta la defensa.</p>
             <div className="hero-actions">
@@ -176,6 +176,7 @@ export default function Home() {
             </div>
           </div>
           <div className="hero-visual" aria-label="Trabajo académico organizado">
+            <img className="hero-isotipo" src="/isotipo-tustareas.png" alt="" aria-hidden="true" />
             <div className="paper-card paper-main">
               <span className="paper-kicker">HOJA DE RUTA ACADÉMICA</span>
               <h3>De la idea a la defensa</h3>
@@ -232,14 +233,24 @@ export default function Home() {
             <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=85" alt="Equipo profesional trabajando alrededor de una mesa" />
             <div className="team-badge"><Users /><span><strong>Un equipo multidisciplinario</strong> detrás de cada proyecto</span></div>
           </div>
-          <div className="about-copy"><span className="section-kicker">QUIÉNES SOMOS</span><h2>Detrás de cada entrega hay personas que se involucran</h2><p>Somos un emprendimiento paraguayo de asesoría académica que combina metodología, redacción y atención cercana para ayudar a estudiantes a avanzar con seguridad.</p>
-            <div className="mission"><div><Target /><span><strong>Misión</strong>Brindar soluciones académicas rigurosas, claras y accesibles que impulsen el aprendizaje y la aprobación.</span></div><div><Sparkles /><span><strong>Visión</strong>Ser la asesoría académica de referencia en Paraguay por nuestra calidad, ética y acompañamiento humano.</span></div></div>
+          <div className="about-copy"><span className="section-kicker">QUIÉNES SOMOS</span><h2>Detrás de cada entrega hay personas que se involucran</h2><p>Somos un equipo de asesoría académica que combina metodología, redacción y atención cercana para ayudar a estudiantes de cualquier lugar a avanzar con seguridad.</p>
+            <div className="mission"><div><Target /><span><strong>Misión</strong>Brindar soluciones académicas rigurosas, claras y accesibles que impulsen el aprendizaje y la aprobación.</span></div><div><Sparkles /><span><strong>Visión</strong>Ser una asesoría académica de referencia por nuestra calidad, ética y acompañamiento humano.</span></div></div>
           </div>
         </div>
       </section>
 
       <section className="extras section">
-        <div className="container extras-wrap"><div><span className="section-kicker">SERVICIOS COMPLEMENTARIOS</span><h2>Todo lo que tu entrega necesita</h2></div><div className="chips">{["Tablas y gráficos", "Formato APA", "Bibliografía", "Índices automáticos", "Google Forms", "Tabulación de datos", "Análisis estadístico", "Presentación para defensa", "Preparación oral"].map(item => <span key={item}><Check size={14} />{item}</span>)}</div></div>
+        <div className="extras-watermark"><img src="/isotipo-tustareas.png" alt="" aria-hidden="true" /></div>
+        <div className="container">
+          <div className="extras-heading"><div><span className="section-kicker light">SERVICIOS COMPLEMENTARIOS</span><h2>Los detalles que convierten un trabajo en una entrega profesional</h2></div><p>Sumá apoyo técnico y visual en las etapas que más tiempo demandan. Podés contratarlos junto con cualquiera de nuestras modalidades.</p></div>
+          <div className="extras-grid">
+            <article><FilePenLine /><div><h3>Formato y estructura</h3><p>Normas APA, bibliografía, índices automáticos, índice de tablas y figuras.</p></div></article>
+            <article><BookOpenCheck /><div><h3>Encuestas y datos</h3><p>Google Forms, codificación, tabulación y organización de respuestas.</p></div></article>
+            <article><Target /><div><h3>Análisis estadístico</h3><p>Tablas, gráficos e interpretación clara de resultados para tu investigación.</p></div></article>
+            <article><GraduationCap /><div><h3>Defensa y exposición</h3><p>Presentación profesional y preparación personalizada para la exposición oral.</p></div></article>
+          </div>
+          <a className="button button-white extras-cta" href="#contacto">Consultar servicios complementarios <ArrowRight size={17} /></a>
+        </div>
       </section>
 
       <section className="faq section" id="preguntas">
@@ -259,7 +270,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><span className="brand-crop"><img src="/brand-board.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></span></a><p>Asesoría académica profesional con atención en todo Paraguay.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
+      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><img className="brand-logo footer-logo" src="/logo-tustareas.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></a><p>Asesoría académica profesional para estudiantes de cualquier lugar.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
 
       {cookieOpen && <div className="cookie-banner" role="dialog" aria-label="Preferencias de cookies"><div><b>Tu privacidad nos importa</b><p>Usamos almacenamiento local y cookies para recordar tus preferencias y mejorar tu experiencia. No vendemos tus datos.</p></div><div><button onClick={() => consent("essential")}>Solo esenciales</button><button className="button button-small" onClick={() => consent("accepted")}>Aceptar</button></div></div>}
       <a className="float-whatsapp" href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp"><MessageCircle /></a>
