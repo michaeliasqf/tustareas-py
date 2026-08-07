@@ -117,6 +117,24 @@ export default function Home() {
     localStorage.setItem("tustareas-contact-draft", JSON.stringify({ name, detail, selected }));
   }, [name, detail, selected]);
 
+  useEffect(() => {
+    const elements = document.querySelectorAll<HTMLElement>(
+      ".section-heading, .center-heading, .service-card, .detail-intro, .detail-columns > div, .process-grid article, .guarantee, .team-photo, .about-copy, .extras-heading, .extras-grid article, .faq-grid > div, .contact-card"
+    );
+    elements.forEach((element) => element.classList.add("reveal-item"));
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.12, rootMargin: "0px 0px -45px" }
+    );
+    elements.forEach((element) => observer.observe(element));
+    return () => observer.disconnect();
+  }, []);
+
   const whatsappUrl = useMemo(() => {
     const base = `${name ? `Hola, soy ${name}. ` : "Hola. "}Quiero un diagnóstico gratuito para ${selected}.`;
     return `https://wa.me/${PHONE}?text=${encodeURIComponent(detail ? `${base} Mi consulta: ${detail}` : base)}`;
@@ -242,14 +260,14 @@ export default function Home() {
       <section className="extras section">
         <div className="extras-watermark"><img src="/isotipo-tustareas.png" alt="" aria-hidden="true" /></div>
         <div className="container">
-          <div className="extras-heading"><div><span className="section-kicker light">SERVICIOS COMPLEMENTARIOS</span><h2>Los detalles que convierten un trabajo en una entrega profesional</h2></div><p>Sumá apoyo técnico y visual en las etapas que más tiempo demandan. Podés contratarlos junto con cualquiera de nuestras modalidades.</p></div>
+          <div className="extras-heading"><div><span className="section-kicker">EXTRAS OPCIONALES</span><h2>Sumá únicamente lo que tu modalidad necesita</h2></div><p>No son una cuarta modalidad ni repiten el servicio principal. Son apoyos puntuales que podés añadir a Tutoría, Desarrollo o Corrección según el estado de tu trabajo.</p></div>
           <div className="extras-grid">
             <article><FilePenLine /><div><h3>Formato y estructura</h3><p>Normas APA, bibliografía, índices automáticos, índice de tablas y figuras.</p></div></article>
             <article><BookOpenCheck /><div><h3>Encuestas y datos</h3><p>Google Forms, codificación, tabulación y organización de respuestas.</p></div></article>
             <article><Target /><div><h3>Análisis estadístico</h3><p>Tablas, gráficos e interpretación clara de resultados para tu investigación.</p></div></article>
             <article><GraduationCap /><div><h3>Defensa y exposición</h3><p>Presentación profesional y preparación personalizada para la exposición oral.</p></div></article>
           </div>
-          <a className="button button-white extras-cta" href="#contacto">Consultar servicios complementarios <ArrowRight size={17} /></a>
+          <a className="button extras-cta" href="#contacto">Consultar extras para mi modalidad <ArrowRight size={17} /></a>
         </div>
       </section>
 
@@ -270,7 +288,7 @@ export default function Home() {
         </div>
       </section>
 
-      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><img className="brand-logo footer-logo" src="/logo-tustareas.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></a><p>Asesoría académica profesional para estudiantes de cualquier lugar.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
+      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><img className="brand-logo footer-logo" src="/logo-tustareas-invertido.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></a><p>Asesoría académica profesional para estudiantes de cualquier lugar.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
 
       {cookieOpen && <div className="cookie-banner" role="dialog" aria-label="Preferencias de cookies"><div><b>Tu privacidad nos importa</b><p>Usamos almacenamiento local y cookies para recordar tus preferencias y mejorar tu experiencia. No vendemos tus datos.</p></div><div><button onClick={() => consent("essential")}>Solo esenciales</button><button className="button button-small" onClick={() => consent("accepted")}>Aceptar</button></div></div>}
       <a className="float-whatsapp" href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp"><MessageCircle /></a>

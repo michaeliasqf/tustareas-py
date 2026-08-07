@@ -1,0 +1,13 @@
+{
+  "name": "tustareas.py | Asesoría Académica",
+  "short_name": "tustareas.py",
+  "description": "Tutoría, elaboración y corrección académica con acompañamiento profesional.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#041b3b",
+  "icons": [
+    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}
