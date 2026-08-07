@@ -1,7 +1,9 @@
 {
-  "name": "tustareas.py | Asesoría Académica",
+  "name": "tustareas.py | Asesoría académica online",
   "short_name": "tustareas.py",
-  "description": "Tutoría, elaboración y corrección académica con acompañamiento profesional.",
+  "description": "Tutoría, desarrollo y corrección académica con acompañamiento profesional hasta la defensa.",
+  "lang": "es-PY",
+  "scope": "/",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",

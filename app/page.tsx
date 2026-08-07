@@ -5,25 +5,28 @@ import {
   BookOpenCheck,
   Check,
   ChevronDown,
-  CircleCheck,
   FilePenLine,
   GraduationCap,
   AtSign as Instagram,
   Mail,
+  Landmark,
   Menu,
   MessageCircle,
   ShieldCheck,
   Sparkles,
   Target,
   Users,
+  WalletCards,
   X,
 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
+import Image from "next/image";
 
-const Tilt3D = dynamic(() => import("./motion-primitives").then((module) => module.Tilt3D), { ssr: false });
-const FloatLayer = dynamic(() => import("./motion-primitives").then((module) => module.FloatLayer), { ssr: false });
 const ScrollProgress = dynamic(() => import("./motion-primitives").then((module) => module.ScrollProgress), { ssr: false });
+const AnimatedCounter = dynamic(() => import("./motion-primitives").then((module) => module.AnimatedCounter), { ssr: false });
+const HeroVideo = dynamic(() => import("./hero-video"), { ssr: false });
+const HeroFlowCanvas = dynamic(() => import("./hero-flow-canvas"), { ssr: false });
 
 const PHONE = "595993372593";
 const EMAIL = "tustareas.py.edu@gmail.com";
@@ -91,6 +94,20 @@ const faqs = [
   ["¿Me acompañan hasta la defensa?", "Sí. Damos seguimiento durante el proceso de aprobación, atendemos observaciones y podemos ayudarte con la presentación y la exposición oral."],
 ];
 
+const paymentOptions = [
+  ["/payment-logos/itau.png", "Itaú Paraguay", "Banco", "itau"],
+  ["/payment-logos/sudameris.svg", "Sudameris", "Banco", "sudameris"],
+  ["/payment-logos/ueno.svg", "ueno bank", "Banco", "ueno"],
+  ["/payment-logos/gnb.svg", "GNB Paraguay", "Banco", "gnb"],
+  ["/payment-logos/continental.png", "Banco Continental", "Banco", "continental"],
+  ["/payment-logos/atlas.jpg", "Banco Atlas", "Banco", "atlas"],
+  ["/payment-logos/basa.svg", "Banco Basa", "Banco", "basa"],
+  ["/payment-logos/banco-familiar.webp", "Banco Familiar", "Banco", "familiar"],
+  ["/payment-logos/tigo-money.png", "Tigo Money", "Billetera", "tigo"],
+  ["/payment-logos/personal-pay.svg", "Personal Pay", "Billetera", "personal"],
+  ["/payment-logos/mango.svg", "Mango", "Billetera", "mango"],
+];
+
 function buildWhatsApp(service: string, name = "") {
   const intro = name ? `Hola, soy ${name}.` : "Hola.";
   return `https://wa.me/${PHONE}?text=${encodeURIComponent(`${intro} Quiero solicitar un diagnóstico gratuito para ${service}.`)}`;
@@ -105,17 +122,25 @@ export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
   useEffect(() => {
-    const consent = localStorage.getItem("tustareas-cookie-consent");
-    setCookieOpen(!consent);
-    const draft = localStorage.getItem("tustareas-contact-draft");
-    if (draft) {
-      try {
-        const parsed = JSON.parse(draft);
-        setName(parsed.name || "");
-        setDetail(parsed.detail || "");
-        setSelected(parsed.selected || "Tutoría Académica");
-      } catch {}
-    }
+    const frame = requestAnimationFrame(() => {
+      const consent = localStorage.getItem("tustareas-cookie-consent");
+      setCookieOpen(!consent);
+      const draft = localStorage.getItem("tustareas-contact-draft");
+      if (draft) {
+        try {
+          const parsed: unknown = JSON.parse(draft);
+          if (typeof parsed === "object" && parsed !== null) {
+            const saved = parsed as Record<string, unknown>;
+            if (typeof saved.name === "string") setName(saved.name.slice(0, 100));
+            if (typeof saved.detail === "string") setDetail(saved.detail.slice(0, 2000));
+            if (typeof saved.selected === "string" && services.some((service) => service.title === saved.selected)) setSelected(saved.selected);
+          }
+        } catch {
+          localStorage.removeItem("tustareas-contact-draft");
+        }
+      }
+    });
+    return () => cancelAnimationFrame(frame);
   }, []);
 
   useEffect(() => {
@@ -124,7 +149,7 @@ export default function Home() {
 
   useEffect(() => {
     const elements = document.querySelectorAll<HTMLElement>(
-      ".section-heading, .center-heading, .service-card, .detail-intro, .detail-columns > div, .process-grid article, .guarantee, .team-photo, .about-copy, .extras-heading, .extras-grid article, .faq-grid > div, .contact-card"
+      ".section-heading, .center-heading, .service-card, .detail-intro, .detail-columns > div, .process-grid article, .guarantee, .team-photo, .about-copy, .extras-heading, .extras-grid article, .faq-grid > div, .contact-card, .payments-shell"
     );
     elements.forEach((element) => element.classList.add("reveal-item"));
     const observer = new IntersectionObserver(
@@ -149,27 +174,24 @@ export default function Home() {
     event.preventDefault();
     const subject = `Diagnóstico gratuito — ${selected}`;
     const body = `Nombre: ${name || "Sin indicar"}\nServicio: ${selected}\n\nConsulta:\n${detail || "Quiero recibir más información."}`;
+    localStorage.removeItem("tustareas-contact-draft");
     window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
   }
 
   function consent(value: "accepted" | "essential") {
     localStorage.setItem("tustareas-cookie-consent", value);
-    document.cookie = `tustareas_consent=${value}; max-age=31536000; path=/; SameSite=Lax`;
+    const secure = window.location.protocol === "https:" ? "; Secure" : "";
+    document.cookie = `tustareas_consent=${value}; max-age=31536000; path=/; SameSite=Lax${secure}`;
     setCookieOpen(false);
   }
 
   return (
     <main>
       <ScrollProgress />
-      <div className="topbar">
-        <span><CircleCheck size={15} /> Diagnóstico gratuito y sin compromiso</span>
-        <div><a href={`mailto:${EMAIL}`}><Mail size={14} /> {EMAIL}</a><a href={buildWhatsApp("asesoría académica")}><MessageCircle size={14} /> +595 993 372593</a></div>
-      </div>
-
       <header className="nav-wrap">
         <nav className="nav container" aria-label="Navegación principal">
           <a href="#inicio" className="brand" aria-label="tustareas.py — inicio">
-            <img className="brand-logo" src="/logo-tustareas.png" alt="tustareas.py — Tareas, Proyectos, Tesis" />
+            <Image className="brand-logo" src="/logo-tustareas.png" width={1168} height={414} priority alt="tustareas.py — Tareas, Proyectos, Tesis" />
           </a>
           <div className={`nav-links ${menuOpen ? "open" : ""}`}>
             <a href="#servicios" onClick={() => setMenuOpen(false)}>Servicios</a>
@@ -183,30 +205,28 @@ export default function Home() {
       </header>
 
       <section className="hero" id="inicio">
+        <HeroFlowCanvas />
         <div className="hero-glow" />
         <div className="container hero-grid">
-          <div className="hero-copy">
+          <div className="hero-intro">
             <div className="eyebrow">Asesoría académica en Paraguay</div>
             <h1>Tu meta académica,<br /><span>bien acompañada.</span></h1>
+          </div>
+          <div className="hero-body">
             <p>Convertimos la incertidumbre en un plan claro. Te orientamos, desarrollamos o corregimos tu trabajo con rigor, confidencialidad y seguimiento hasta la defensa.</p>
             <div className="hero-actions">
               <a className="button" href="#contacto">Solicitar diagnóstico <ArrowRight size={18} /></a>
               <a className="button button-ghost" href="#servicios">Conocer servicios</a>
             </div>
             <div className="trust-row">
-              <div><strong>+150</strong><span>Proyectos aprobados</span></div>
-              <div><strong>+500</strong><span>Clientes acompañados</span></div>
-              <div><strong>100%</strong><span>Atención confidencial</span></div>
+              <div><AnimatedCounter target={150} prefix="+" /><span>Proyectos aprobados</span></div>
+              <div><AnimatedCounter target={500} prefix="+" /><span>Clientes acompañados</span></div>
+              <div><AnimatedCounter target={100} suffix="%" /><span>Atención confidencial</span></div>
             </div>
           </div>
-          <Tilt3D className="hero-visual brand-visual" intensity={4}>
-            <div className="brand-disc"><img src="/isotipo-tustareas.png" alt="Isotipo de tustareas.py" /></div>
-            <FloatLayer className="modality-pill pill-one"><GraduationCap /><span><b>Tutoría</b>Acompañamiento</span></FloatLayer>
-            <FloatLayer className="modality-pill pill-two" delay={0.8}><FilePenLine /><span><b>Desarrollo</b>Elaboración profesional</span></FloatLayer>
-            <FloatLayer className="modality-pill pill-three" delay={1.5}><BookOpenCheck /><span><b>Corrección</b>Revisión integral</span></FloatLayer>
-            <div className="brand-orbit orbit-one" />
-            <div className="brand-orbit orbit-two" />
-          </Tilt3D>
+          <div className="hero-visual photo-visual">
+            <HeroVideo />
+          </div>
         </div>
       </section>
 
@@ -221,7 +241,7 @@ export default function Home() {
                 <span className="service-label">{service.label}</span>
                 <h3>{service.title}</h3><p>{service.description}</p>
                 <ul>{service.bullets.map(bullet => <li key={bullet}><Check size={16} />{bullet}</li>)}</ul>
-                <a href={buildWhatsApp(service.title)} target="_blank" rel="noreferrer">Consultar esta modalidad <ArrowRight size={16} /></a>
+                <a href={buildWhatsApp(service.title)} target="_blank" rel="noopener noreferrer">Consultar esta modalidad <ArrowRight size={16} /></a>
               </article>
             ))}
           </div>
@@ -249,7 +269,7 @@ export default function Home() {
       <section className="about section" id="nosotros">
         <div className="container about-grid">
           <div className="team-photo">
-            <img src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?auto=format&fit=crop&w=1400&q=85" alt="Equipo profesional trabajando alrededor de una mesa" />
+            <Image src="/team-working.jpg" width={1400} height={919} sizes="(max-width: 900px) 100vw, 52vw" alt="Equipo profesional trabajando alrededor de una mesa" />
             <div className="team-badge"><Users /><span><strong>Un equipo multidisciplinario</strong> detrás de cada proyecto</span></div>
           </div>
           <div className="about-copy"><span className="section-kicker">QUIÉNES SOMOS</span><h2>Detrás de cada entrega hay personas que se involucran</h2><p>Somos un equipo de asesoría académica que combina metodología, redacción y atención cercana para ayudar a estudiantes de cualquier lugar a avanzar con seguridad.</p>
@@ -259,7 +279,7 @@ export default function Home() {
       </section>
 
       <section className="extras section">
-        <div className="extras-watermark"><img src="/isotipo-tustareas.png" alt="" aria-hidden="true" /></div>
+        <div className="extras-watermark"><Image src="/isotipo-tustareas.png" width={1254} height={1254} alt="" aria-hidden="true" /></div>
         <div className="container">
           <div className="extras-heading"><div><span className="section-kicker">SERVICIOS ESPECÍFICOS</span><h2>Sumá únicamente lo que tu modalidad necesita</h2></div><p>Apoyos puntuales que podés añadir a Tutoría, Desarrollo o Corrección según el estado y las necesidades de tu trabajo.</p></div>
           <div className="extras-grid">
@@ -280,19 +300,36 @@ export default function Home() {
         <div className="container contact-card">
           <div className="contact-copy"><span className="section-kicker light">DIAGNÓSTICO GRATUITO</span><h2>Contanos dónde estás. Te ayudamos a definir el próximo paso.</h2><p>Completá estos datos y elegí cómo querés conversar. Tu borrador queda guardado en este dispositivo por si volvés más tarde.</p><div className="contact-info"><a href={buildWhatsApp("asesoría académica")}><MessageCircle />+595 993 372593</a><a href={`mailto:${EMAIL}`}><Mail />{EMAIL}</a></div></div>
           <form className="contact-form" onSubmit={sendEmail}>
-            <label>¿Cómo te llamás?<input value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre" /></label>
+            <label>¿Cómo te llamás?<input name="name" autoComplete="name" maxLength={100} value={name} onChange={e => setName(e.target.value)} placeholder="Tu nombre" /></label>
             <fieldset><legend>¿Qué servicio te interesa?</legend><div className="service-options">{services.map(s => <button type="button" key={s.title} className={selected === s.title ? "selected" : ""} onClick={() => setSelected(s.title)}>{selected === s.title && <Check size={14} />}{s.title}</button>)}</div></fieldset>
-            <label>Contanos brevemente<textarea value={detail} onChange={e => setDetail(e.target.value)} placeholder="Ej.: Tengo el anteproyecto y necesito revisar la metodología…" rows={4} /></label>
-            <div className="form-actions"><a className="button whatsapp" href={whatsappUrl} target="_blank" rel="noreferrer"><MessageCircle size={18} />Enviar por WhatsApp</a><button className="button email" type="submit"><Mail size={18} />Enviar por correo</button></div>
+            <label>Contanos brevemente<textarea name="detail" maxLength={2000} value={detail} onChange={e => setDetail(e.target.value)} placeholder="Ej.: Tengo el anteproyecto y necesito revisar la metodología…" rows={4} /></label>
+            <div className="form-actions"><a className="button whatsapp" href={whatsappUrl} target="_blank" rel="noopener noreferrer" onClick={() => localStorage.removeItem("tustareas-contact-draft")}><MessageCircle size={18} />Enviar por WhatsApp</a><button className="button email" type="submit"><Mail size={18} />Enviar por correo</button></div>
             <small><ShieldCheck size={14} /> Tu información se utiliza únicamente para responder esta consulta.</small>
           </form>
         </div>
       </section>
 
-      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><img className="brand-logo footer-logo" src="/logo-tustareas-invertido.png" alt="tustareas.py — Tareas, Proyectos, Tesis" /></a><p>Asesoría académica profesional para estudiantes de cualquier lugar.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
+      <section className="payments section" id="pagos">
+        <div className="container payments-shell">
+          <div className="payments-intro"><span className="section-kicker light">FORMAS DE PAGO</span><h2>Elegí la opción que te resulte más simple</h2><p>Al confirmar tu propuesta te compartimos los datos exactos del receptor. Verificamos cada pago antes de iniciar la etapa acordada.</p></div>
+          <div className="payment-methods">
+            <article><Landmark /><span><b>Transferencia bancaria</b>Desde bancos habilitados en Paraguay mediante SIPAP.</span></article>
+            <article><WalletCards /><span><b>Billeteras y giros</b>Tigo Money, Personal Pay o Mango, según disponibilidad.</span></article>
+            <article><ShieldCheck /><span><b>Confirmación segura</b>Comprobante y validación antes de comenzar.</span></article>
+          </div>
+          <div className="payment-carousel" aria-label="Bancos y billeteras disponibles">
+            <div className="payment-track">
+              {[...paymentOptions, ...paymentOptions].map(([logo, paymentName, type, logoClass], index) => <div className={`payment-chip payment-logo-${logoClass}`} key={`${paymentName}-${index}`} aria-hidden={index >= paymentOptions.length}><span><Image src={logo} width={94} height={52} alt="" /></span><div><b>{paymentName}</b><small>{type}</small></div></div>)}
+            </div>
+          </div>
+          <p className="payment-note">La cuenta o billetera disponible y cualquier costo aplicable se confirman en la propuesta. Nunca envíes dinero a datos que no hayan sido compartidos por nuestros canales oficiales.</p>
+        </div>
+      </section>
 
-      {cookieOpen && <div className="cookie-banner" role="dialog" aria-label="Preferencias de cookies"><div><b>Tu privacidad nos importa</b><p>Usamos almacenamiento local y cookies para recordar tus preferencias y mejorar tu experiencia. No vendemos tus datos.</p></div><div><button onClick={() => consent("essential")}>Solo esenciales</button><button className="button button-small" onClick={() => consent("accepted")}>Aceptar</button></div></div>}
-      <a className="float-whatsapp" href={buildWhatsApp("asesoría académica")} target="_blank" rel="noreferrer" aria-label="Contactar por WhatsApp"><MessageCircle /></a>
+      <footer><div className="container footer-grid"><a href="#inicio" className="brand brand-footer"><Image className="brand-logo footer-logo" src="/logo-tustareas-invertido.png" width={718} height={316} alt="tustareas.py — Tareas, Proyectos, Tesis" /></a><p>Asesoría académica profesional para estudiantes de cualquier lugar.</p><div className="socials"><a href="https://www.instagram.com/tustareas.py/" target="_blank" rel="noopener noreferrer" aria-label="Instagram"><Instagram /></a><a href={buildWhatsApp("asesoría académica")} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp"><MessageCircle /></a><a href={`mailto:${EMAIL}`} aria-label="Correo"><Mail /></a></div></div><div className="container footer-bottom"><span>© 2026 tustareas.py</span><span>Confidencialidad · Compromiso · Rigor académico</span></div></footer>
+
+      {cookieOpen && <div className="cookie-banner" role="dialog" aria-label="Preferencias de privacidad"><div><b>Tu privacidad nos importa</b><p>Guardamos localmente tus preferencias y el borrador del formulario. No instalamos publicidad ni vendemos tus datos.</p></div><div><button onClick={() => consent("essential")}>Solo esenciales</button><button className="button button-small" onClick={() => consent("accepted")}>Aceptar</button></div></div>}
+      <a className="float-whatsapp" href={buildWhatsApp("asesoría académica")} target="_blank" rel="noopener noreferrer" aria-label="Contactar por WhatsApp"><MessageCircle /></a>
     </main>
   );
 }

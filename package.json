@@ -9,43 +9,28 @@
     "dev": "next dev --webpack",
     "build": "next build --webpack",
     "start": "next start",
-    "build:sites": "vinext build",
-    "test": "npm run build && node --test tests/rendered-html.test.mjs",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
-    "db:generate": "drizzle-kit generate"
+    "test": "npm run build && node --test tests/production.test.mjs",
+    "lint": "eslint app tests next.config.ts",
+    "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@jridgewell/sourcemap-codec": "^1.5.4",
-    "@rolldown/binding-win32-x64-msvc": "^1.0.0",
-    "drizzle-orm": "0.45.2",
-    "framer-motion": "^12.39.0",
-    "lightningcss-win32-x64-msvc": "^1.32.0",
-    "lucide-react": "^1.28.0",
-    "magic-string": "^0.30.19",
-    "next": "16.2.6",
-    "pathe": "^2.0.2",
-    "react": "19.2.6",
-    "react-dom": "19.2.6",
-    "unenv": "^2.0.0-rc.23"
+    "framer-motion": "^12.43.0",
+    "lucide-react": "^1.30.0",
+    "next": "16.3.0",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "1.37.1",
-    "@tailwindcss/postcss": "4.2.1",
-    "@types/node": "22.19.19",
-    "@types/react": "19.2.14",
-    "@types/react-dom": "19.2.3",
-    "@vitejs/plugin-react": "6.0.2",
-    "@vitejs/plugin-rsc": "0.5.26",
-    "csstype": "^3.2.2",
-    "drizzle-kit": "0.31.10",
+    "@types/node": "^22.19.19",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
     "eslint": "9.39.4",
-    "eslint-config-next": "16.2.6",
-    "react-server-dom-webpack": "19.2.6",
-    "tailwindcss": "4.2.1",
-    "typescript": "5.9.3",
-    "vinext": "0.0.50",
-    "vite": "8.0.13",
-    "wrangler": "4.92.0"
+    "eslint-config-next": "16.3.0",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.9.3"
+  },
+  "overrides": {
+    "hermes-parser": "0.37.0"
   },
   "type": "module"
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { motion, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { motion, useInView, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
 import type { MouseEvent, ReactNode } from "react";
 
 type TiltProps = {
@@ -66,4 +67,29 @@ export function ScrollProgress() {
   const { scrollYProgress } = useScroll();
   const scaleX = useSpring(scrollYProgress, { stiffness: 110, damping: 28, restDelta: 0.001 });
   return <motion.div className="scroll-progress" style={{ scaleX }} aria-hidden="true" />;
+}
+
+export function AnimatedCounter({ target, prefix = "", suffix = "" }: { target: number; prefix?: string; suffix?: string }) {
+  const reduced = useReducedMotion();
+  const counterRef = useRef<HTMLElement>(null);
+  const isInView = useInView(counterRef, { once: true, amount: 0.65 });
+  const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    if (reduced || !isInView) return;
+    const duration = 1500;
+    const startedAt = performance.now();
+    let frame = 0;
+    const tick = (now: number) => {
+      const progress = Math.min((now - startedAt) / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setValue(Math.round(target * eased));
+      if (progress < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [isInView, reduced, target]);
+
+  const displayedValue = reduced ? target : value;
+  return <strong ref={counterRef} className="animated-counter" aria-label={`${prefix}${target}${suffix}`}>{prefix}{displayedValue}{suffix}</strong>;
 }
