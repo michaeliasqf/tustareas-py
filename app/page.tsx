@@ -25,7 +25,10 @@ import Image from "next/image";
 
 const ScrollProgress = dynamic(() => import("./motion-primitives").then((module) => module.ScrollProgress), { ssr: false });
 const AnimatedCounter = dynamic(() => import("./motion-primitives").then((module) => module.AnimatedCounter), { ssr: false });
-const HeroVideo = dynamic(() => import("./hero-video"), { ssr: false });
+const HeroVideo = dynamic(() => import("./hero-video"), {
+  ssr: false,
+  loading: () => <div className="hero-video-frame hero-video-loading" aria-hidden="true" />,
+});
 const HeroFlowCanvas = dynamic(() => import("./hero-flow-canvas"), { ssr: false });
 
 const PHONE = "595993372593";
@@ -159,7 +162,7 @@ export default function Home() {
           observer.unobserve(entry.target);
         }
       }),
-      { threshold: 0.12, rootMargin: "0px 0px -45px" }
+      { threshold: 0.02, rootMargin: "0px 0px 120px" }
     );
     elements.forEach((element) => observer.observe(element));
     return () => observer.disconnect();

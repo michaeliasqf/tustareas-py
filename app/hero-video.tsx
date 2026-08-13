@@ -11,7 +11,10 @@ export default function HeroVideo() {
     const motionPreference = window.matchMedia("(prefers-reduced-motion: reduce)");
     const updatePlayback = (visible: boolean) => {
       if (motionPreference.matches || !visible) video.pause();
-      else video.play().catch(() => undefined);
+      else {
+        if (video.readyState === HTMLMediaElement.HAVE_NOTHING) video.load();
+        video.play().catch(() => undefined);
+      }
     };
     const observer = new IntersectionObserver(([entry]) => updatePlayback(entry.isIntersecting), { threshold: 0.15 });
     observer.observe(video);
@@ -27,8 +30,9 @@ export default function HeroVideo() {
 
   return (
     <div className="hero-video-frame">
-      <video ref={videoRef} muted loop playsInline preload="metadata" aria-label="Docente orientando a una estudiante durante una sesión de tutoría en una biblioteca">
-        <source src="/hero-tutoring-library-hd.mp4" type="video/mp4" />
+      <video ref={videoRef} muted loop playsInline preload="none" poster="/hero-video-poster.jpg" aria-label="Docente orientando a una estudiante durante una sesión de tutoría en una biblioteca">
+        <source src="/hero-tutoring-library-web.mp4" type="video/mp4" />
+        Tu navegador no puede reproducir este video.
       </video>
       <div className="hero-video-tint" aria-hidden="true" />
     </div>

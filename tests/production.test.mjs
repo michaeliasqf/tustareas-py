@@ -66,7 +66,7 @@ test("robots y sitemap son accesibles", async () => {
 });
 
 test("el video se sirve con caché inmutable", async () => {
-  const response = await fetch(`${baseUrl}/hero-tutoring-library-hd.mp4`, { method: "HEAD" });
+  const response = await fetch(`${baseUrl}/hero-tutoring-library-web.mp4`, { method: "HEAD" });
   assert.equal(response.status, 200);
   assert.match(response.headers.get("cache-control") ?? "", /max-age=31536000/);
 });

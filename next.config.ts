@@ -35,7 +35,11 @@ const nextConfig: NextConfig = {
         ],
       },
       {
-        source: "/hero-tutoring-library-hd.mp4",
+        source: "/hero-tutoring-library-web.mp4",
+        headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
+      },
+      {
+        source: "/hero-video-poster.jpg",
         headers: [{ key: "Cache-Control", value: "public, max-age=31536000, immutable" }],
       },
     ];
