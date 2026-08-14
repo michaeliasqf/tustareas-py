@@ -31,7 +31,7 @@ export default function HeroVideo() {
   return (
     <div className="hero-video-frame">
       <video ref={videoRef} muted loop playsInline preload="none" poster="/hero-video-poster.jpg" aria-label="Docente orientando a una estudiante durante una sesión de tutoría en una biblioteca">
-        <source src="/hero-tutoring-library-web.mp4" type="video/mp4" />
+        <source src="/hero-tutoring-library-web-hq.mp4" type="video/mp4" />
         Tu navegador no puede reproducir este video.
       </video>
       <div className="hero-video-tint" aria-hidden="true" />
